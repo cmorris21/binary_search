@@ -37,9 +37,8 @@ def find_smallest_positive(xs):
         return 0
     else:
         return search(left, right)
-           
+          
         
-
 def count_repeats(xs, x):
     '''
     Assume that xs is a list of numbers sorted from HIGHEST to LOWEST,
@@ -60,6 +59,47 @@ def count_repeats(xs, x):
     >>> count_repeats([3, 2, 1], 4)
     0
     '''
+    left = 0
+    right = len(xs) - 1
+   
+    def search1(left,right):
+        mid = (left + right)//2
+        if xs[mid] == x:
+            if mid == 0 or xs[mid-1] > x:
+                return mid
+            else:
+                return search1(left, mid-1)
+       
+        if left == right:
+            return None
+        if x > xs[mid]:
+            return search1(left, mid -1)
+        if x < xs[mid]:
+            return search1(mid + 1, right)
+
+    def search2(left, right):
+        mid = (left+ right)//2
+        if xs[mid] == x:
+            if mid == (len(xs)-1) or x > xs[mid+1]:
+                return mid
+            else:
+                return search2(mid + 1, right)
+        if left == right:
+            return None
+        if xs[mid] > x:
+            return search2(mid + 1, right)
+        if x > xs[mid]:
+            return search2(left, mid-1)
+    
+    if xs == []:
+        return 0
+    first_search = search1(left, right)
+    second_search = search2(left, right)
+    
+    if first_search == None or second_search == None:
+        return 0
+    else:
+        return second_search - first_search + 1
 
 
 def argmin(f, lo, hi, epsilon=1e-3):
@@ -82,4 +122,19 @@ def argmin(f, lo, hi, epsilon=1e-3):
     >>> argmin(lambda x: (x-5)**2, -20, 0)
     -0.00016935087808430278
     '''
+    
+    low = lo
+    high = hi
+    def search(low, high):
+        m1 = low + (high - low)/10
+        m2 = low + (high- low)/5
+        if high - low < epsilon:
+            return high
+        if f(m1) > f(m2):
+            return search(m1, high)
+        if f(m1) < f(m2):
+            return search(low, m2)
+    
+    return search(low,high)
 
+# collaborated with Yusuf Ismaeel
