@@ -17,16 +17,18 @@ def find_smallest_positive(xs):
     >>> find_smallest_positive([-3, -2, -1]) is None
     True
     '''
-    
     left = 0
-    right = length(xs)-1
-    
+    right = len(xs)-1
     def search(left, right):
-        mid = (left + right)//2
+        mid = (left+right)//2
         if 0 == xs[mid]:
-            return xs[mid+1]
-        if 0 > xs[mid]:
-                    if 0 < xs[mid]:
+            return mid+1
+        if left == right:
+            if xs[mid] > 0:
+                return mid
+            else:
+                return None
+        if 0 < xs[mid]:
             return search(left, mid-1)
         if 0 > xs[mid]:
             return search(mid+1, right)
